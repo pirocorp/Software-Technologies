@@ -1,0 +1,54 @@
+Full Artical
+
+                    <article>
+                        <header>
+                            <h2>May Faces Rebellion on Customs Union From Tory Lawmakers</h2>
+                        </header>
+
+                        <p>
+                            Eight Conservative Party lawmakers have backed an amendment calling for the U.K. to keep close ties to the European Union after it leaves, an attempt to reverse Theresa May’s Brexit policy that could threaten her political survival.
+                        </p>
+                        <p>
+                            The number to publicly declare their intention of defying the government and calling for the U.K. to remain in a customs union after the split has risen since the amendment was originally published. It could potentially be enough to wipe out May’s slim working majority in the House of Commons.
+                        </p>
+                        <p>
+                            The government relies on the backing of 13 including support from Northern Ireland’s Democratic Unionist Party, which has 10 lawmakers. If May were to lose the vote -- for which no date has yet been set -- on a central plank of her legislative program, it could set off a train of events that could in theory topple her government.
+                        </p>
+                        <p>
+                            The latest stirrings of trouble for May are happening while in Brussels the European Union’s chief negotiator delivered some stern words for May’s negotiating stance on a transition period she’s asked for to give businesses time to adjust to the changes. Time is running out for differences to be bridged ahead of an end-March deadline.
+                        </p>
+                        <p>
+                            <strong>Potential Outreach</strong>
+                        </p>
+                        <p>
+                            Earlier, in a speech at Bloomberg’s European headquarters, International Trade Secretary Liam Fox said he hoped to persuade Tory rebels to change their minds. The pound fell.
+                        </p>
+                        <p>
+                            “I hope that we will be able to persuade our colleagues as the prime minister sets out the case,” Fox said answering questions in London. “The approach that the prime minister has set out will actually lead to the greater prosperity and security of the people of this country.
+                        </p>
+                        <p>
+                            He added: “And I hope that they will understand that the drawbacks of the customs union that I set out today would remarkably hinder this country in terms of the future economic opportunities that might otherwise be available.”
+                        </p>
+                        <p>
+                            Former Tory leader William Hague had warned Tory rebels earlier in the day against “threatening the very existence of a Tory government.” Writing in The Daily Telegraph he urged them against “setting off a chain of events that would never be forgiven.”
+                        </p>
+                        <p>
+                            Hague was suggesting that by defeating May on a central pillar of government policy, her entire administration could crumble.
+                        </p>
+                        <p>
+                            That’s because a prime minister who can no longer get her legislation past parliament is without authority and could be challenged on a vote of confidence. If power was seen to ebb away from May, Jeremy Corbyn’s Labour Party would be in a stronger position to urge her to call a general election -- which they hope and expect to win.
+                        </p>
+                        <p>
+                            The Trade Bill which has been amended by the rebels, has been pushed back with no date set for a vote on the key issue. May’s advisors will be hoping the rebels can be brought round before it reaches a crunch vote in Parliament.
+                        </p>
+
+                        <small class="author">
+                            Kitty Donaldson
+                        </small>
+
+                        <footer>
+                            <div class="pull-right">
+                                <a class="btn btn-default btn-xs" href="#">Read more &raquo</a>
+                            </div>
+                        </footer>
+                    </article>
