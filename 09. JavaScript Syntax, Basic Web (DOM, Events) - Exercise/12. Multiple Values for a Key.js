@@ -18,7 +18,7 @@ function solve(inputLines) {
     if(key in arr){
         console.log(arr[key].join("\n"));
     } else {
-        console.log('None')
+        console.log('None');
     }
 }
 
