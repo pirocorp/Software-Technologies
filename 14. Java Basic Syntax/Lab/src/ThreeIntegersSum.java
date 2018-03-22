@@ -8,7 +8,7 @@ public class ThreeIntegersSum {
         String inputLine = scan.nextLine();
         int[] arr = Arrays
                 .stream(inputLine.split(" "))
-                .mapToInt(x -> Integer.valueOf(x))
+                .mapToInt(Integer::valueOf)
                 .sorted()
                 .toArray();
 
