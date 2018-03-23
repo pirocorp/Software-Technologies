@@ -44,7 +44,7 @@ public class BombNumbers {
         return result;
     }
 
-    public static int indexOfElement (int[] numbers, int element){
+    private static int indexOfElement (int[] numbers, int element){
         for (int i = 0; i < numbers.length; i++) {
             if (element == numbers[i]){
                 return i;
