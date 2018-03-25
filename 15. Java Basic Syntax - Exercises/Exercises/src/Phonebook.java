@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class Phonebook {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        HashMap<String, String> phonebook = new HashMap<>();
+        HashMap<String, String> phoneBook = new HashMap<>();
 
         String inputLine = scan.nextLine();
 
@@ -18,15 +18,15 @@ public class Phonebook {
             {
                 case "A":
                     String phone = tokens[2];
-                    if(phonebook.containsKey(name)){
-                        phonebook.computeIfPresent(name, (k, v) -> v = phone);
+                    if(phoneBook.containsKey(name)){
+                        phoneBook.computeIfPresent(name, (k, v) -> v = phone);
                     } else {
-                        phonebook.put(name, phone);
+                        phoneBook.put(name, phone);
                     }
                     break;
                 case "S":
-                    if(phonebook.containsKey(name)){
-                        System.out.println(name + " -> " + phonebook.get(name));
+                    if(phoneBook.containsKey(name)){
+                        System.out.println(name + " -> " + phoneBook.get(name));
                     } else {
                         System.out.printf("Contact %s does not exist.", name);
                         System.out.println("");
