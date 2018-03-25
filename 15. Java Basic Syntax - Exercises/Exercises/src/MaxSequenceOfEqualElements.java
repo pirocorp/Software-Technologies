@@ -18,7 +18,7 @@ public class MaxSequenceOfEqualElements {
             int currentElement = numbers[i];
             int leftElement = numbers[i - 1];
 
-            if(currentElement == leftElement){
+            if(currentElement == leftElement) {
                 len++;
 
                 if(len > bestLen){
@@ -36,7 +36,7 @@ public class MaxSequenceOfEqualElements {
 
         System.arraycopy(numbers, bestStart, res, 0, bestLen);
 
-       String result = Arrays.stream(res)
+        String result = Arrays.stream(res)
                 .mapToObj(String::valueOf)
                 .collect(Collectors.joining(" "));
         System.out.println(result);
