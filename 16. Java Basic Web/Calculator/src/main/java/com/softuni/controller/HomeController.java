@@ -4,11 +4,17 @@ import com.softuni.entity.Calculator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController {
+    @ModelAttribute("calc")
+    public Calculator getCalc(){
+        return new Calculator();
+    }
+
 	@GetMapping("/")
 	public String index(Model model) {
 		model.addAttribute("operator", "+");
@@ -17,22 +23,14 @@ public class HomeController {
 	}
 
     @PostMapping("/")
-    public String calculate(@RequestParam String leftOperand,
-                            @RequestParam String operator,
-                            @RequestParam String rightOperand,
+    public String calculate(@ModelAttribute("calc") Calculator calculator,
                             Model model){
-
-        double num1 = parseNum(leftOperand);
-        double num2 = parseNum(rightOperand);
-
-        Calculator calculator = new Calculator(num1, num2, operator);
 
         double result = calculator.calculateResult();
 
         model.addAttribute("leftOperand", calculator.getLeftOperand());
         model.addAttribute("operator", calculator.getOperator());
         model.addAttribute("rightOperand", calculator.getRightOperand());
-
         model.addAttribute("result", result);
 
         model.addAttribute("view","views/calculatorForm");

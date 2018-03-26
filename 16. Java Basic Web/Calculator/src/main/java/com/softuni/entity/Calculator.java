@@ -5,6 +5,9 @@ public class Calculator {
     private double rightOperand;
     private String operator;
 
+    public Calculator() {
+    }
+
     public Calculator(double leftOperand, double rightOperand, String operator) {
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
