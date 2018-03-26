@@ -37,16 +37,4 @@ public class HomeController {
 
         return "base-layout";
     }
-
-    private double parseNum(String num) {
-
-        double number;
-        try {
-            number = Double.parseDouble(num);
-        } catch (NumberFormatException ex) {
-            number = 0;
-        }
-
-        return number;
-    }
 }
