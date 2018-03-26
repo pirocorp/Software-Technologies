@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Hello, Thymeleaf</title></head>
+<body>
+<h1>Files</h1>
+<form>
+    <input type="text" name="pathString"/>
+    <input type="submit" />
+</form>
+<div th:each =
+             "file : ${allFiles}"
+     th:text = "${file.name}">
+</div>
+
+</body>
+</html>
