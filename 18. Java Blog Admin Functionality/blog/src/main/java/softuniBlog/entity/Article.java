@@ -16,6 +16,15 @@ public class Article {
 
     private User author;
 
+    private String imagePath;
+
+    public Article(String title, String content, User author, String imagePath) {
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.imagePath = imagePath;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
@@ -76,5 +85,13 @@ public class Article {
         }
 
         return summary;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
