@@ -10,11 +10,13 @@ namespace _02.BookLibrary.Models
         {
         }
 
-        public virtual DbSet<Book> Books { get; set; }
+        //public virtual DbSet<Book> Books { get; set; }
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
+
+        public DbSet<Book> Books { get; set; }
     }
 }
