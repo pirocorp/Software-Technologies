@@ -13,7 +13,7 @@ namespace CarRentalSystem.Controllers
 
     public class CarsController : Controller
     {
-        public ActionResult All(int page = 1, string user = null)
+        public ActionResult All(int page = 1, string user = null, string search = null)
         {
             var db = new CarsDbContext();
 
@@ -21,7 +21,16 @@ namespace CarRentalSystem.Controllers
 
             var carsQuery = db.Cars.AsQueryable();
 
-            if (user != null)
+            if (search != null)
+            {
+                carsQuery = carsQuery
+                    .Where(c => c.Make.ToLower().Contains(search.ToLower()) ||
+                                c.Model.ToLower().Contains(search.ToLower()) ||
+                                c.Year.ToString().Contains(search) ||
+                                c.Color.ToLower().Contains(search.ToLower()));
+            }
+
+            if (user != null && user != string.Empty)
             {
                 carsQuery = carsQuery
                     .Where(c => c.Owner.Email == user);
@@ -112,6 +121,7 @@ namespace CarRentalSystem.Controllers
                     PricePerDay = c.PricePerDay,
                     Engine = c.Engine,
                     IsRented = c.IsRented,
+                    TotalRents = c.Rentings.Count,
                     ContactInformation = c.Owner.Email,
                 })
                 .FirstOrDefault();

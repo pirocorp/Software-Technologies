@@ -2,18 +2,35 @@
 
 @{
     var currentUserQuery = Request.QueryString["user"];
-    var carsOf = "Our";
-    if (currentUserQuery != null)
+    var currentSearchQuery = Request.QueryString["search"];
+    var carsOf = "Our cars";
+
+    if (currentUserQuery != null && currentUserQuery != string.Empty)
     {
-        carsOf = currentUserQuery;
+        carsOf = currentUserQuery + " cars";
     }
+
+    if (currentSearchQuery != null && currentSearchQuery != string.Empty)
+    {
+        carsOf = "Cars search result from " + currentUserQuery + " cars" + " for search: \"" + currentSearchQuery + "\"";
+    }
+
 }
 
-<h2 class="text-center mt-60">@carsOf Cars - Page @ViewBag.CurrentPage</h2>
+<h2 class="text-center mt-60">@carsOf - Page @ViewBag.CurrentPage</h2>
 
 @if (!Model.Any())
 {
     <h2 class="text-center">No more Cars</h2>
+}
+
+@using (Html.BeginForm("All", "Cars", FormMethod.Get))
+{
+<div class="text-right mt-60">
+    <input type="text" class="form-control" name="search" style="display: inline-block" value="@Request.QueryString["search"]" />
+    <input type="text" hidden="" name="user" value="@currentUserQuery"/>
+    <input type="submit" value="Search" class="btn btn-primary" />
+</div>
 }
 
 @foreach (var car in Model)
@@ -30,7 +47,12 @@
 </div>
 }
 
+@{
+    var currentUser = currentUserQuery != null ? "&user=" + currentUserQuery : string.Empty;
+    var currentSearch = currentSearchQuery != null ? "&search=" + currentUserQuery : string.Empty;
+}
+
 <p class="text-right">
-    <a href="/Cars/All?page=@(ViewBag.CurrentPage - 1)@(currentUserQuery != null ? "&user=" + currentUserQuery : string.Empty)" class="btn btn-primary @(ViewBag.CurrentPage == 1? "disabled" : string.Empty)">Previous <<</a>
-    <a href="/Cars/All?page=@(ViewBag.CurrentPage + 1)@(currentUserQuery != null ? "&user=" + currentUserQuery : string.Empty)" class="btn btn-primary @(!Model.Any() || Model.Count() < 5 ? "disabled" : string.Empty)">Next >></a>
+    <a href="/Cars/All?page=@(ViewBag.CurrentPage - 1)@currentUser@currentSearch" class="btn btn-primary @(ViewBag.CurrentPage == 1 ? "disabled" : string.Empty)">Previous <<</a>
+    <a href="/Cars/All?page=@(ViewBag.CurrentPage + 1)@currentUser@currentSearch" class="btn btn-primary @(!Model.Any() || Model.Count() < 5 ? "disabled" : string.Empty)">Next >></a>
 </p>

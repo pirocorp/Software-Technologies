@@ -27,6 +27,8 @@
 
         public bool IsRented { get; set; }
 
+        public int TotalRents { get; set; }
+
         public string ContactInformation { get; set; }
     }
 }
