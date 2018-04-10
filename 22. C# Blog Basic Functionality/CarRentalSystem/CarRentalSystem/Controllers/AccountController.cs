@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CarRentalSystem.Models;
+using CarRentalSystem.Models.Renting;
 
 namespace CarRentalSystem.Controllers
 {
@@ -422,6 +423,29 @@ namespace CarRentalSystem.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        [Authorize]
+        public ActionResult Rentings()
+        {
+            var db = new CarsDbContext();
+
+            var userId = this.User.Identity.GetUserId();
+
+            var rentings = db.Rentings
+                .OrderByDescending(r => r.Id)
+                .Where(r => r.UserId == userId)
+                .Select(r => new UserRentingModel
+                {
+                    CarName = r.Car.Make + " " + r.Car.Model + " (" + r.Car.Year + ")",
+                    Days = r.Days,
+                    RentedOn = r.RentedOn,
+                    TotalPrice = r.TotalPrice,
+                    CarImageUrl = r.Car.ImageUrl
+                })
+                .ToList();
+
+            return View(rentings);
         }
 
         #region Helpers
