@@ -2,4 +2,21 @@
 
 <h3 class="text-center">Are you sure you want to rent @Model.CarName?</h3>
 
-<p class="text-center">@Model.Days Days * @Model.PricePerDay EUR/Day = @Model.TotalPrice</p>
+<div class="row">
+    <div class="col-md-4 col-md-offset-4 mt-60">
+        <img src="@Model.CarImageUrl" class="img-responsive"/>
+    </div>
+</div>
+
+<p class="text-center mt-60">@Model.Days Days * @Model.PricePerDay EUR/Day = @Model.TotalPrice EUR</p>
+
+@using (Html.BeginForm("Rent", "Cars", FormMethod.Post))
+{ 
+    @Html.HiddenFor(m => m.CarId)
+    @Html.HiddenFor(m => m.Days)
+
+    <div class="text-center mt-60">
+        <input type="submit" value="Rent!" class="btn btn-primary"/>
+        <a href="/Cars/Details/@Model.CarId" class="btn btn-default">Back</a>
+    </div>
+}

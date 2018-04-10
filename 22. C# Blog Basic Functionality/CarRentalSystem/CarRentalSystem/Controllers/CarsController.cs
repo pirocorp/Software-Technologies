@@ -1,4 +1,6 @@
-﻿namespace CarRentalSystem.Controllers
+﻿using System;
+
+namespace CarRentalSystem.Controllers
 {
     using System.Web.Mvc;
     using CarRentalSystem.Models.Cars;
@@ -138,8 +140,9 @@
                 .Select(c => new
                 {
                     c.IsRented,
-                    FullName = c.Make + " " + c.Model + "(" + c.Year + ")",
-                    c.PricePerDay
+                    FullName = c.Make + " " + c.Model + " (" + c.Year + ")",
+                    c.PricePerDay,
+                    c.ImageUrl
                 })
                 .FirstOrDefault();
 
@@ -148,11 +151,46 @@
                 return HttpNotFound();
             }
 
+            rentCarModel.CarImageUrl = car.ImageUrl;
             rentCarModel.CarName = car.FullName;
             rentCarModel.PricePerDay = car.PricePerDay;
             rentCarModel.TotalPrice = car.PricePerDay * rentCarModel.Days;
 
             return View(rentCarModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Rent(int carId, int days)
+        {
+            var db = new CarsDbContext();
+
+            var car = db.Cars
+                .Where(c => c.Id == carId)
+                .FirstOrDefault();
+
+            var userId = this.User.Identity.GetUserId();
+
+            if (car == null || car.IsRented || car.OwnerId == userId)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var renting = new Renting
+            {
+                CarId = carId,
+                Days = days,
+                RentedOn = DateTime.Now,
+                UserId = userId,
+                TotalPrice = days * car.PricePerDay
+            };
+
+            car.IsRented = true;
+
+            db.Rentings.Add(renting);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new {id = car.Id});
         }
     }
 }

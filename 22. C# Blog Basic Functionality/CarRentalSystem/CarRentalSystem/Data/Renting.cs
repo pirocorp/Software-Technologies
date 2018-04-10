@@ -1,10 +1,14 @@
 ﻿namespace CarRentalSystem.Data
 {
+    using System;
+
     public class Renting
     {
         public int Id { get; set; }
 
         public int Days { get; set; }
+
+        public DateTime RentedOn { get; set; }
 
         public decimal TotalPrice { get; set; }
 

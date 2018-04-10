@@ -6,6 +6,8 @@
 
         public string CarName { get; set; }
 
+        public string CarImageUrl { get; set; }
+
         public int Days { get; set; }
 
         public decimal PricePerDay { get; set; }

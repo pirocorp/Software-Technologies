@@ -2,7 +2,7 @@
 
 @if (Model.IsRented)
 {
-    <h2 class="text-center text-warning">This car is already rented</h2>
+    <h2 class="text-center text-warning">This car is already rented!</h2>
 }
 
 <div class="row mt-60">
@@ -46,12 +46,15 @@
                     });
                 }
             }
-
-            @using (Html.BeginForm("Rent", "Cars", FormMethod.Get))
+        
+            @if (Model.ContactInformation != this.User.Identity.Name)
             {
-                @Html.Hidden("CarId", Model.Id)
-                <span>Rent this car for @Html.DropDownList("Days", options) days!</span>
-                <input type="submit" class="btn btn-primary @(Model.IsRented ? "disabled" : string.Empty)" value="Rent!"/>
+                using (Html.BeginForm("Rent", "Cars", FormMethod.Get))
+                 {
+                     @Html.Hidden("CarId", Model.Id)
+                     <span>Rent this car for @Html.DropDownList("Days", options) days!</span>
+                     <input type="submit" class="btn btn-primary @(Model.IsRented ? "disabled" : string.Empty)" value="Rent!"/>
+                 }
             }
         </p>
     </div>
