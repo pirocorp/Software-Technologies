@@ -1,0 +1,58 @@
+﻿@model CarRentalSystem.Models.Cars.CarDetailsModel
+
+@if (Model.IsRented)
+{
+    <h2 class="text-center text-warning">This car is already rented</h2>
+}
+
+<div class="row mt-60">
+    <div class="col-md-4">
+        <img src="@Model.ImageUrl" class="img-responsive" />
+    </div>
+    <div class="col-md-4">
+        <h2 class="car-details">@Model.Make @Model.Model, @(Model.Color != null ? Model.Color : string.Empty)</h2>
+        <h3>@Model.Year - @Model.PricePerDay &#8364 / day</h3>
+        <p class="lead">
+            <a href="mailto:@Model.ContactInformation">@Model.ContactInformation</a>
+            <br />
+            <br />
+            <a class="btn btn-primary" href="/Cars/All?user=@Model.ContactInformation">See All Cars By This User</a>
+        </p>
+    </div>
+    <div class="col-md-4">
+        <p class="lead">
+            @Model.Engine.ToString("F1") - (@Model.EngineType)
+        </p>
+        <p class="lead">
+            @if (Model.Power != null)
+            {
+                <span>@Model.Power hp.</span>
+            }
+        </p>
+        <p>
+            @{
+                var options = new List<SelectListItem>
+                {
+                    new SelectListItem {Text = "1", Value = "1", Selected = true},
+                };
+
+                for (int i = 2; i <= 10; i++)
+                {
+                    options.Add(new SelectListItem
+                    {
+                        Text = i.ToString(),
+                        Value = i.ToString(),
+                        Selected = false
+                    });
+                }
+            }
+
+            @using (Html.BeginForm("Rent", "Cars", FormMethod.Get))
+            {
+                @Html.Hidden("CarId", Model.Id)
+                <span>Rent this car for @Html.DropDownList("Days", options) days!</span>
+                <input type="submit" class="btn btn-primary @(Model.IsRented ? "disabled" : string.Empty)" value="Rent!"/>
+            }
+        </p>
+    </div>
+</div>

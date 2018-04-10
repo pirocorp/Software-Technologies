@@ -1,0 +1,23 @@
+﻿@model CarRentalSystem.Models.Cars.CreateCarModel
+
+@{
+    ViewBag.Title = "Add Car For Rent";
+}
+
+@using (Html.BeginForm("Create", "Cars", FormMethod.Post))
+{
+    @Html.EditorForModel()
+
+    <div>
+        @Html.LabelFor(m => m.EngineType)
+    </div>
+    <div>
+        @Html.EnumDropDownListFor(m => m.EngineType)
+    </div>
+
+    <br />
+    <div>
+        <input type="submit" class="btn btn-primary" value="Save Car"/>
+    </div>
+}
+
