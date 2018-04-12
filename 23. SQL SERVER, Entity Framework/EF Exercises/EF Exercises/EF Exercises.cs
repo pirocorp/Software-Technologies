@@ -68,7 +68,7 @@
             //DeleteComment();
 
             //Delete Post
-            PostDelete();
+            //PostDelete();
 
         }
 
