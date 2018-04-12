@@ -50,14 +50,189 @@
             //SelectUsersCreatedPosts();
 
             //Join Authors with Titles
-            JoinAuthorsWithTitles();
+            //JoinAuthorsWithTitles();
+
+            //Select Author from specific post
+            //SelectAuthor();
+
+            //Order Posts Authors
+            //OrderAuthors();
+
+            //Create a new Post
+            //CreatePost();
+
+            //Edit user details
+            //EditUser();
+
+            //Delete comment from post
+            //DeleteComment();
+
+            //Delete Post
+            PostDelete();
+
+        }
+
+        private static void PostDelete()
+        {
+            var db = new BlogDbContext();
+
+            var postInfoQuery = db.Posts
+                .Select(p => new PostInfo
+                {
+                    ID = p.Id,
+                    PostComments = p.Comments,
+                    PostTags = p.Tags
+                })
+                .Where(p => p.ID == 35);
+
+            var postInfo = postInfoQuery.SingleOrDefault();
+
+            var post = db.Posts.Where(p => p.Id == 35).SingleOrDefault();
+
+            if (postInfo == null || post == null)
+            {
+                Console.WriteLine($"Post Not Found!");
+                return;
+            }
+
+            Console.WriteLine(postInfoQuery);
+            Console.WriteLine();
+            PrintPostInfo(postInfo);
+
+            db.Comments.RemoveRange(post.Comments);
+            post.Tags.Clear();
+            db.Posts.Remove(post);
+            db.SaveChanges();
+
+            Console.WriteLine($"Post #{post.Id} deleted successfully");
+        }
+
+        private static void PrintPostInfo(PostInfo postInfo)
+        {
+            Console.WriteLine($"Post ID: {postInfo.ID}");
+            Console.WriteLine($"{String.Join("; ", postInfo.PostComments.Select(p => p.Text))}");
+            Console.WriteLine($"{String.Join("; ", postInfo.PostTags.Select(t => t.Name))}");
+        }
+
+        private static void DeleteComment()
+        {
+            var db = new BlogDbContext();
+
+            var commentInfo = db.Comments.SingleOrDefault(c => c.Id == 1);
+
+            if (commentInfo == null)
+            {
+                Console.WriteLine($"Comment not found!");
+                return;
+            }
+
+            db.Comments.Remove(commentInfo);
+            db.SaveChanges();
+
+            Console.WriteLine($"Comment #{commentInfo.Id} deleted!");
+        }
+
+        private static void EditUser()
+        {
+            var db = new BlogDbContext();
+
+            var userInfo = db.Users.SingleOrDefault(user => user.UserName == "GBotev");
+
+            if (userInfo == null)
+            {
+                Console.WriteLine("User Not Found!");
+                return;
+            }
+
+            var oldName = userInfo.FullName;
+
+            userInfo.FullName = "Georgi Botev";
+
+            db.SaveChanges();
+
+            Console.WriteLine($"User {oldName} has been renamed to {userInfo.FullName}");
+        }
+
+        private static void CreatePost()
+        {
+            var db = new BlogDbContext();
+
+            var post = new Post()
+            {
+                AuthorId = 2,
+                Title = "Random Title",
+                Body = "Random Content",
+                Date = DateTime.Now,
+            };
+
+            db.Posts.Add(post);
+            db.SaveChanges();
+
+            Console.WriteLine($"Post #{post.Id} created!");
+        }
+
+        private static void OrderAuthors()
+        {
+            var db = new BlogDbContext();
+
+            var authorsQuery = db.Users
+                .Where(u => u.Posts.Count > 0)
+                .Select(u => new
+                {
+                    Username = u.UserName,
+                    FullName = u.FullName,
+                    Id = u.Id,
+                })
+                .OrderByDescending(x => x.Id);
+
+            Console.WriteLine(authorsQuery);
+            Console.WriteLine();
+
+            var orderedAuthors = authorsQuery.ToList();
+
+            foreach (var author in orderedAuthors)
+            {
+                Console.WriteLine($"Username: {author.Username}");
+                Console.WriteLine($"Full Name: {author.FullName}");
+            }
+        }
+
+        private static void SelectAuthor()
+        {
+            var db = new BlogDbContext();
+
+            var author = db.Users
+                .SelectMany(user => user.Posts, (user, post) => new {user.UserName, user.FullName, post.Id})
+                .Single(post => post.Id == 4);
+
+            Console.WriteLine($"Username: {author.UserName}");
+            Console.WriteLine($"Full Name: {author.FullName}");
+            Console.WriteLine();
+
+            Console.WriteLine(db.Posts.Find(4).User.UserName);
+            Console.WriteLine(db.Posts.Find(4).User.FullName);
+            Console.WriteLine();
         }
 
         private static void JoinAuthorsWithTitles()
         {
             var db = new BlogDbContext();
 
+            var query = db.Users
+                .SelectMany(u => u.Posts, (user, post) => new {user.UserName, post.Title, user.Posts.Count})
+                .OrderByDescending(x => x.Count);
 
+            Console.WriteLine(query);
+            Console.WriteLine();
+
+            var users = query.ToList();
+
+            foreach (var user in users)
+            {
+                Console.WriteLine($"Username: {user.UserName}");
+                Console.WriteLine($"Title: {user.Title.Trim()}");
+                Console.WriteLine();
+            }
         }
 
         private static void SelectUsersCreatedPosts()
@@ -318,6 +493,14 @@
             foreach (var user in db.Users)
                 Console.WriteLine(user.UserName);
         }
+    }
+
+    class PostInfo
+    {
+        public int ID { get; set; }
+        public ICollection<Comments> PostComments { get; set; }
+        public ICollection<Tag> PostTags { get; set; }
+
     }
 
     class PostData
