@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Collections.Generic;
 
     class EfExercises
     {
@@ -30,7 +31,168 @@
             //Native SQL
             //ExtractingPostsBetweenDatesWithNativeSql();
 
+            //List All Rows From Posts
+            //ListAllPosts();
 
+            //ListAllUsers
+            //AllUsers();
+
+            //List Title and Body from Posts
+            //TitleAndBody();
+
+            //Order users by user and fullname
+            //ListOrderedUsers();
+
+            //Order by two columns
+            //ListOrderedUsersByTwoColumns();
+
+            //Select Authors and Order them by posts count
+            //SelectUsersCreatedPosts();
+
+            //Join Authors with Titles
+            JoinAuthorsWithTitles();
+        }
+
+        private static void JoinAuthorsWithTitles()
+        {
+            var db = new BlogDbContext();
+
+
+        }
+
+        private static void SelectUsersCreatedPosts()
+        {
+            var db = new BlogDbContext();
+
+            var usersQuery = db.Users
+                .Where(u => u.Posts.Count > 0)
+                .Select(u => new
+                {
+                    UserName = u.UserName,
+                    FullName = u.FullName,
+                    PostsCount = u.Posts.Count,
+                })
+                .OrderByDescending(u => u.PostsCount);
+
+            Console.WriteLine(usersQuery);
+            Console.WriteLine();
+
+            var users = usersQuery.ToList();
+
+            foreach (var user in users)
+            {
+                Console.WriteLine($"Username: {user.UserName}");
+                Console.WriteLine($"Full Name: {user.FullName}");
+                Console.WriteLine($"Posts Count: {user.PostsCount}");
+                Console.WriteLine();
+            }
+        }
+
+        private static void ListOrderedUsersByTwoColumns()
+        {
+            var db = new BlogDbContext();
+
+            var userQuery = db.Users
+                .Select(u => new
+                {
+                    Username = u.UserName,
+                    FullName = u.FullName,
+                })
+                .OrderByDescending(u => u.Username)
+                .ThenByDescending(u => u.FullName);
+
+            Console.WriteLine(userQuery);
+            Console.WriteLine();
+
+            var users = userQuery.ToList();
+
+            foreach (var user in users)
+            {
+                Console.WriteLine($"Username: {user.Username}");
+                Console.WriteLine($"Full Name: {user.FullName}");
+                Console.WriteLine();
+            }
+        }
+
+        private static void ListOrderedUsers()
+        {
+            var db = new BlogDbContext();
+
+            var usersQuery = db.Users
+                .Select(u => new
+                {
+                    Username = u.UserName,
+                    FullName = u.FullName
+                })
+                .OrderBy(u => u.Username);
+
+            Console.WriteLine(usersQuery);
+            Console.WriteLine();
+
+            var users = usersQuery.ToList();
+
+            foreach (var user in users)
+            {
+                Console.WriteLine($"Username: {user.Username}");
+                Console.WriteLine($"Full Name: {user.FullName}");
+                Console.WriteLine();
+            }
+        }
+
+        private static void TitleAndBody()
+        {
+            var db = new BlogDbContext();
+
+            var postsQuery = db.Posts
+                .Select(p => new
+                    {
+                        Title = p.Title,
+                        Body = p.Body
+                    });
+
+            var posts = postsQuery.ToList();
+
+            Console.WriteLine(postsQuery);
+            Console.WriteLine();
+
+            foreach (var p in posts)
+            {
+                Console.WriteLine($"Title: {p.Title}");
+                Console.WriteLine($"Body: {p.Body}");
+                Console.WriteLine();
+            }
+        }
+
+        private static void AllUsers()
+        {
+            var db = new BlogDbContext();
+
+            var users = db.Users.ToList();
+
+            foreach (var user in users)
+            {
+                Console.WriteLine($"ID: {user.Id}");
+                Console.WriteLine($"Name: {user.FullName}");
+                Console.WriteLine($"Comments Count: {user.Comments.Count}");
+                Console.WriteLine($"Posts Count: {user.Posts.Count}");
+                Console.WriteLine();
+            }
+        }
+
+        private static void ListAllPosts()
+        {
+            var db = new BlogDbContext();
+
+            var posts = db.Posts.ToList();
+
+            foreach (var p in posts)
+            {
+                Console.WriteLine($"Title: {p.Title.Trim()}");
+                Console.WriteLine($"Author Id: {p.AuthorId}");
+                Console.WriteLine($"Comments Count: {p.Comments.Count}");
+                Console.WriteLine($"Tags Count: {p.Tags.Count}");
+                Console.WriteLine();
+            }
         }
 
         private static void ExtractingPostsBetweenDatesWithNativeSql()
@@ -41,7 +203,7 @@
             var endDate = new DateTime(2016, 06, 14);
 
             var posts = db.Database.SqlQuery<PostData>(
-                @"SELECT ID, Title, Date FROM Posts
+                @"SELECT ID, Title, Date FROM Post
                     WHERE CONVERT(date, Date)
                     BETWEEN {0} AND {1}
                     ORDER BY Date",
@@ -88,12 +250,12 @@
         {
             var db = new BlogDbContext();
 
-            var post = new Posts()
+            var post = new Post()
             {
                 Title = "New Post Title",
                 Date = DateTime.Now,
                 Body = "This post have comments and tags",
-                Users = db.Users.First(),
+                User = db.Users.First(),
                 Comments = new Comments[]
                 {
                     new Comments() {Text = "Comment 1", AuthorName = "Test Author", Date = DateTime.Now},
@@ -101,7 +263,7 @@
                     {
                         Text = "Comment 2",
                         Date = DateTime.Now,
-                        Users = db.Users.First()
+                        User = db.Users.First()
                     }
                 },
                 Tags = db.Tags.Take(3).ToList()
@@ -115,7 +277,7 @@
         {
             var db = new BlogDbContext();
 
-            var post = new Posts()
+            var post = new Post()
             {
                 Title = "New Title",
                 Body = "New Post Body",
@@ -132,7 +294,7 @@
         {
             var db = new BlogDbContext();
 
-            // Use LINQ to query the Posts enities -> creates SQL Query
+            // Use LINQ to query the Post enities -> creates SQL Query
             var posts = db.Posts.Select(p => new
             {
                 p.Id,

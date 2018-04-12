@@ -22,8 +22,8 @@ namespace EF_Exercises
 
         public DateTime Date { get; set; }
 
-        public virtual Posts Posts { get; set; }
+        public virtual Post Post { get; set; }
 
-        public virtual Users Users { get; set; }
+        public virtual User User { get; set; }
     }
 }

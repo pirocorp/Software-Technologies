@@ -13,35 +13,35 @@ namespace EF_Exercises
         }
 
         public virtual DbSet<Comments> Comments { get; set; }
-        public virtual DbSet<Posts> Posts { get; set; }
-        public virtual DbSet<Tags> Tags { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Posts>()
+            modelBuilder.Entity<Post>()
                 .HasMany(e => e.Comments)
-                .WithRequired(e => e.Posts)
+                .WithRequired(e => e.Post)
                 .HasForeignKey(e => e.PostId)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Posts>()
+            modelBuilder.Entity<Post>()
                 .HasMany(e => e.Tags)
                 .WithMany(e => e.Posts)
                 .Map(m => m.ToTable("PostsTags").MapLeftKey("PostId").MapRightKey("TagId"));
 
-            modelBuilder.Entity<Users>()
+            modelBuilder.Entity<User>()
                 .Property(e => e.UserName)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Users>()
+            modelBuilder.Entity<User>()
                 .HasMany(e => e.Comments)
-                .WithOptional(e => e.Users)
+                .WithOptional(e => e.User)
                 .HasForeignKey(e => e.AuthorId);
 
-            modelBuilder.Entity<Users>()
+            modelBuilder.Entity<User>()
                 .HasMany(e => e.Posts)
-                .WithOptional(e => e.Users)
+                .WithOptional(e => e.User)
                 .HasForeignKey(e => e.AuthorId);
         }
     }

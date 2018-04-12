@@ -6,13 +6,13 @@ namespace EF_Exercises
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Posts
+    public partial class Post
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Posts()
+        public Post()
         {
             Comments = new HashSet<Comments>();
-            Tags = new HashSet<Tags>();
+            Tags = new HashSet<Tag>();
         }
 
         public int Id { get; set; }
@@ -32,9 +32,9 @@ namespace EF_Exercises
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comments> Comments { get; set; }
 
-        public virtual Users Users { get; set; }
+        public virtual User User { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Tags> Tags { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }
