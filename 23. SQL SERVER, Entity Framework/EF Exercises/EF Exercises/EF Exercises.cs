@@ -70,6 +70,164 @@
             //Delete Post
             //PostDelete();
 
+            //Extract posts without specified tag
+            //PostsWithoutTag();
+
+            //Change text of all comments which has tag security to the fullname of the author
+            //ChangeComments();
+
+            //Print all comments by given user
+            //PrintAllUserComments();
+
+            //Presenting the Database
+            //PresentDatabase();
+
+        }
+
+        private static void PresentDatabase()
+        {
+            var db = new BlogDbContext();
+
+            var users = db.Users
+                .OrderBy(u => u.Id)
+                .ToArray();
+
+            for (var i = 0; i < users.Length; i++)
+            {
+                var currentUser = users[i];
+
+                Console.WriteLine();
+                Console.WriteLine($"{currentUser.Id}. {currentUser.UserName}");
+                Console.WriteLine($"Posts:");
+                Console.WriteLine();
+
+                var userPosts = currentUser.Posts
+                    .OrderBy(p => p.Date)
+                    .ThenBy(p => p.Id)
+                    .ToArray();
+
+                for (var j = 0; j < userPosts.Length; j++)
+                {
+                    var currentPost = userPosts[j];
+
+                    var titleLenght = Math.Min(30, currentPost.Title.Length - 1);
+                    var contentLenght = Math.Min(30, currentPost.Body.Length - 1);
+
+                    Console.WriteLine($"####{currentPost.Id}. {currentPost.Title.Substring(0, titleLenght).Trim()} ...");
+                    Console.WriteLine($"####Date:{currentPost.Date}");
+                    Console.WriteLine($"####Tags: {String.Join(", ", currentPost.Tags.Select(t => t.Name).ToList()).Trim()}");
+                    Console.WriteLine($"####Content: {currentPost.Body.Substring(0, contentLenght).Trim()} ...");
+                    Console.WriteLine($"####Comments: ");
+                    Console.WriteLine();
+
+                    var postComments = currentPost.Comments
+                        .OrderBy(c => c.Date)
+                        .ThenBy(c => c.AuthorName)
+                        .ToArray();
+
+                    for (var k = 0; k < postComments.Length; k++)
+                    {
+                        var currentComment = postComments[k];
+                        var currentAuthor = string.Empty;
+
+                        if (currentComment.AuthorName == null)
+                        {
+                            currentAuthor = db.Users.Find(currentComment.AuthorId).FullName;
+                        }
+                        else
+                        {
+                            currentAuthor = currentComment.AuthorName;
+                        }
+
+                        var comentLenght = Math.Min(30, currentComment.Text.Length - 1);
+
+                        Console.WriteLine($"#### ####Author: {currentAuthor}");
+                        Console.WriteLine($"#### ####Comment: {currentComment.Text.Substring(0, comentLenght).Trim()} ...");
+                        Console.WriteLine();
+                    }
+                }
+            }
+        }
+
+        private static void PrintAllUserComments()
+        {
+            var username = Console.ReadLine();
+
+            var db = new BlogDbContext();
+
+            var user = db.Users.Where(u => u.UserName == username).FirstOrDefault();
+
+            if (user == null)
+            {
+                Console.WriteLine("None");
+            }
+
+            var comments = db.Comments
+                .Where(c => c.AuthorId == user.Id)
+                .Select(c => c.Text)
+                .ToList();
+
+            Console.WriteLine(String.Join(Environment.NewLine, comments));
+
+        }
+
+        private static void ChangeComments()
+        {
+            var db = new BlogDbContext();
+
+            var tagSecurity = db.Tags.SingleOrDefault(t => t.Name == "security");
+
+            var commentsIds = db.Comments
+                .ToList()
+                .Where(c => c.Post.Tags.Contains(tagSecurity))
+                .Select(c => c.Id)
+                .ToList();
+
+            for (var i = 0; i < commentsIds.Count; i++)
+            {
+                var currentComment = db.Comments.Find(commentsIds[i]);
+
+                if (currentComment == null)
+                {
+                    continue;
+                }
+
+                var oldComment = currentComment;
+
+                if (currentComment.AuthorName != null)
+                {
+                    currentComment.Text = currentComment.AuthorName;
+                }
+                else
+                {
+                    currentComment.Text = db.Users.Find(currentComment.AuthorId).FullName;
+                }
+
+                db.SaveChanges();
+                Console.WriteLine($"Comment: {oldComment.Text} has changed to {currentComment.Text}");
+            }
+
+        }
+
+        private static void PostsWithoutTag()
+        {
+            var db = new BlogDbContext();
+
+            var tagIt = db.Tags.SingleOrDefault(t => t.Name == "it");
+
+            if (tagIt == null)
+            {
+                Console.WriteLine("Tag Not Found!");
+                return;
+            }
+
+            var posts = db.Posts.ToList().Where(p => !p.Tags.Contains(tagIt));
+
+            foreach (var post in posts)
+            {
+                Console.WriteLine($"{post.Id}.{post.Body.Trim()}");
+                Console.WriteLine();
+            }
         }
 
         private static void PostDelete()
