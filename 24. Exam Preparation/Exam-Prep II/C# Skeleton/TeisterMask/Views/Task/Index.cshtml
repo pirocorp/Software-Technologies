@@ -1,4 +1,5 @@
-﻿@model List<TeisterMask.Models.Task>
+﻿@using TeisterMask.Models
+@model List<TeisterMask.Models.Task>
 
 @{
 	ViewBag.Title = "Index";
@@ -15,7 +16,7 @@
 		<div class="column header finished">Finished</div>
 	</header>
 	<ul class="column open">
-		@foreach (var task in Model.Where(t => t.Status == "Open").ToList())
+		@foreach (var task in Model.Where(t => t.Status == StatusTypes.Open).ToList())
 		{
 			<li>
 				@task.Title
@@ -24,7 +25,7 @@
 		}
 	</ul>
 	<ul class="column inProgress">
-		@foreach (var task in Model.Where(t => t.Status == "In Progress").ToList())
+		@foreach (var task in Model.Where(t => t.Status == StatusTypes.InProgress).ToList())
 		{
 			<li>
 				@task.Title
@@ -33,7 +34,7 @@
 		}
 	</ul>
 	<ul class="column finished">
-		@foreach (var task in Model.Where(t => t.Status == "Finished").ToList())
+		@foreach (var task in Model.Where(t => t.Status == StatusTypes.Finished).ToList())
 		{
 			<li>
 				@task.Title

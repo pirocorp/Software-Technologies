@@ -1,48 +1,92 @@
-﻿using System;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using TeisterMask.Models;
 
 namespace TeisterMask.Controllers
 {
-        [ValidateInput(false)]
+    [ValidateInput(false)]
 	public class TaskController : Controller
 	{
 	    [HttpGet]
-            [Route("")]
+        [Route("")]
 	    public ActionResult Index()
 	    {
-		    // TODO: Implement me...
-		}
+	        using (var db = new TeisterMaskDbContext())
+	        {
+	            var tasks = db.Tasks.ToList();
+
+	            return View(tasks);
+	        }
+        }
 
         [HttpGet]
         [Route("create")]
         public ActionResult Create()
 		{
-		    // TODO: Implement me...
-		}
+            return View();
+        }
 
-		[HttpPost]
+        [HttpPost]
 		[Route("create")]
         [ValidateAntiForgeryToken]
 		public ActionResult Create(Task task)
 		{
-			// TODO: Implement me...
+		    if (task == null)
+		    {
+		        RedirectToAction("Index");
+		    }
+
+		    if (string.IsNullOrWhiteSpace(task.Title))
+		    {
+		        RedirectToAction("Index");
+		    }
+
+		    using (var db = new TeisterMaskDbContext())
+		    {
+		        db.Tasks.Add(task);
+		        db.SaveChanges();
+
+		        return RedirectToAction("Index");
+		    }
         }
 
-		[HttpGet]
+        [HttpGet]
 		[Route("edit/{id}")]
         public ActionResult Edit(int id)
 		{
-			// TODO: Implement me...
+		    using (var db = new TeisterMaskDbContext())
+		    {
+		        var task = db.Tasks.Find(id);
+
+                return View(task);
+            }
         }
 
-		[HttpPost]
+        [HttpPost]
 		[Route("edit/{id}")]
         [ValidateAntiForgeryToken]
 		public ActionResult EditConfirm(int id, Task taskModel)
 		{
-			// TODO: Implement me...
-		}
-	}
+		    using (var db = new TeisterMaskDbContext())
+		    {
+		        var task = db.Tasks.Find(id);
+
+		        if (task == null)
+		        {
+		            return RedirectToAction("Index");
+		        }
+
+                //Set task parameters
+		        task.Title = taskModel.Title;
+		        task.Status = taskModel.Status;
+
+                //Save edited task to database
+		        db.Entry(task).State = EntityState.Modified;
+		        db.SaveChanges();
+
+		        return RedirectToAction("Index");
+            }
+        }
+    }
 }

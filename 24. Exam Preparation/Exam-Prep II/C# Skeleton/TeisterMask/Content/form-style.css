@@ -160,3 +160,9 @@ textarea:focus {
 		text-align: right;
 	}
 }
+
+.styled-select {
+   height: 29px;
+   overflow: hidden;
+   width: 240px;
+}
