@@ -2,7 +2,7 @@ const Task = require('../models/Task');
 
 module.exports = {
 	index: (req, res) => {
-/*	    let tasksPromises = [Task.find({status: "Open"}),
+        /*let tasksPromises = [Task.find({status: "Open"}),
             Task.find({status: "In Progress"}),
             Task.find({status: "Finished"})];
 
@@ -27,7 +27,7 @@ module.exports = {
         let taskArgs = req.body;
 
         if(!taskArgs.title || !taskArgs.status){
-            res.redirect('/');
+            res.render('task/create', {error: "Cannot create task!"});
             return;
         }
 
@@ -41,12 +41,10 @@ module.exports = {
         Task.findById(id).then(task => {
             if(!task){
                 res.redirect('/');
-                return;
+            } else {
+                res.render('task/edit', task);
             }
-
-            res.render('task/edit', task);
-            return;
-        });
+        }).catch(err => res.redirect('/'));
 	},
 	editPost: (req, res) => {
         let id = req.params.id;
