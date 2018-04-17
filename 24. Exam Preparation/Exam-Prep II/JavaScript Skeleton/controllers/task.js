@@ -55,14 +55,17 @@ module.exports = {
                 return;
             }
 
+            if(!req.body.title || !req.body.status){
+                res.redirect('/');
+                return;
+            }
+
             task.title = req.body.title;
             task.status = req.body.status;
 
             task.save().then(task => {
                 res.redirect('/');
             });
-
-            return;
         });
 	}
 };
