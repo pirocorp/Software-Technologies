@@ -2,18 +2,69 @@ const Task = require('../models/Task');
 
 module.exports = {
 	index: (req, res) => {
-		// TODO: Implement me...
+/*	    let tasksPromises = [Task.find({status: "Open"}),
+            Task.find({status: "In Progress"}),
+            Task.find({status: "Finished"})];
+
+	    Promise.all(tasksPromises).then(taskResults => {
+        	res.render('task/index', {'openTasks': taskResults[0],
+                'inProgressTasks': taskResults[1],
+                'finishedTasks': taskResults[2]});
+        });*/
+
+        Task.find().then(tasks => {
+            res.render('task/index', {
+                'openTasks': tasks.filter(t => t.status === "Open"),
+                'inProgressTasks': tasks.filter(t => t.status === "In Progress"),
+                'finishedTasks': tasks.filter(t => t.status === "Finished"),
+            });
+        });
 	},
 	createGet: (req, res) => {
-		// TODO: Implement me...
+        res.render('task/create');
 	},
 	createPost: (req, res) => {
-		// TODO: Implement me...
+        let taskArgs = req.body;
+
+        if(!taskArgs.title || !taskArgs.status){
+            res.redirect('/');
+            return;
+        }
+
+        Task.create(taskArgs).then(task => {
+            res.redirect('/');
+        });
 	},
 	editGet: (req, res) => {
-		// TODO: Implement me...
+        let id = req.params.id;
+
+        Task.findById(id).then(task => {
+            if(!task){
+                res.redirect('/');
+                return;
+            }
+
+            res.render('task/edit', task);
+            return;
+        });
 	},
 	editPost: (req, res) => {
-		// TODO: Implement me...
+        let id = req.params.id;
+
+        Task.findById(id).then(task => {
+            if(!task){
+                res.redirect('/');
+                return;
+            }
+
+            task.title = req.body.title;
+            task.status = req.body.status;
+
+            task.save().then(task => {
+                res.redirect('/');
+            });
+
+            return;
+        });
 	}
 };
